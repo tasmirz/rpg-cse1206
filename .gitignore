@@ -1,0 +1,9 @@
+# Build artefacts
+build/
+Database/test/build/
+Database/test/DBTest/
+
+# Editor / OS noise
+*.swp
+*.swo
+.DS_Store
