@@ -27,9 +27,9 @@ static const Graphics::Color *c2 = new Graphics::Color(
     Graphics::rgb(255, 255, 0, 1), Graphics::rgb(100, 0, 0, 1),
     Graphics::Color::ITALIC | Graphics::Color::BLINK);
 static const Graphics::Pixel *a =
-    new Graphics::Pixel("▒", (Graphics::Color *)c);
+    new Graphics::Pixel("█", (Graphics::Color *)c);
 static const Graphics::Pixel *B =
-    new Graphics::Pixel("▒", (Graphics::Color *)c2);
+    new Graphics::Pixel("█", (Graphics::Color *)c2);
 class Game;
 class Food {
  protected:

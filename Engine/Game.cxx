@@ -64,7 +64,14 @@ bool Game::move(DIRECTIONS direction, bool ate) {
     }
   }
   snake.fragments.push_front(arb);
-  if (!ate) snake.fragments.pop_back();
+  if (!ate) {
+    // The tail just vacated its cell; clear it from the grid buffer so
+    // the diff renderer actually erases it. Otherwise the old tail stays
+    // painted forever ("phantom tail" trailing behind the snake).
+    Point vacated = snake.fragments.back();
+    grid(vacated.x, vacated.y) = nullptr;
+    snake.fragments.pop_back();
+  }
   return true;
 }
 void Game::plot() {
@@ -99,7 +106,12 @@ void Game::serve() {  // must be called after put
       }
     }
   } else {
-    grid(foodLocation.x, foodLocation.y) = (Graphics::Pixel*)B;
+    // Only repaint the food if it isn't currently covered by the snake.
+    // Otherwise the food pixel would erase the snake body passing through
+    // (or sitting on) that cell, causing the snake to flicker as food.
+    if (mp[foodLocation.y * columns + foodLocation.x] == 0) {
+      grid(foodLocation.x, foodLocation.y) = (Graphics::Pixel*)B;
+    }
   }
 }
 
