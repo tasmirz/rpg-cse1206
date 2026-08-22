@@ -89,6 +89,16 @@ run: build
 	@ $(executable)
 debug: build
 	gdb $(executable) --tui
+
+# Build and run the open-world RPG (Perlin + cellular automata chunks).
+RPG_DIR = RPG
+rpg:
+	$(MAKE) -C $(RPG_DIR) run
+
+# Run the database test harness.
+dbtest:
+	$(MAKE) -C Database/test -f Makefile-test
+	./Database/test/build/dbtest
 prepare:
 	mkdir $(build_dir)
 	mkdir $(bin_dir)
