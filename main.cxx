@@ -39,7 +39,9 @@ void gameLoop() {
             break;
         }
       }
-      bool sst;
+      // Default direction is 'd' (right) until the player presses a key.
+      if (prev == 'z') prev = 'd';
+      bool sst = true;
       switch (prev) {
         case 'w':
           sst = game.move(Engine::up, state);

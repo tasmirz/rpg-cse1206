@@ -1,7 +1,7 @@
 #include "header.hxx"
 
 using namespace Graphics;
-Point::Point() {}
+Point::Point() : x(-1), y(-1) {}
 Point::Point(int x, int y) : x(x), y(y) {}
 Point Point::operator+(Point q) {
   Point qq(x, y);
