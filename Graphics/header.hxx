@@ -53,6 +53,7 @@ static const Pixel* blank_pixel = new Pixel("  ", (Color*)&default_color);
 
 class Grid {
   Pixel** graph;
+  Pixel** prev;     // snapshot of the last frame for diff rendering
   bool _set = false;
   unsigned rows, columns;
 
@@ -62,6 +63,7 @@ class Grid {
   Grid();
   void set(int rows, int columns);
   void display();
+  void displayDiff();   // only redraw cells that changed since last frame
   void clean();
 };
 void clear(void);

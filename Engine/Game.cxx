@@ -68,18 +68,15 @@ bool Game::move(DIRECTIONS direction, bool ate) {
   return true;
 }
 void Game::plot() {
-  Graphics::clear();
-  grid.clean();
-  // for (auto i = 0; i < rows * columns; i++) {
-  // mp[i] = 0;
-  //}
+  // No full-screen clear; the grid renders only cells that changed.
+  // We still null out cells so the previous frame's pointer is released
+  // before the snake body is rewritten this frame.
   for (auto it = snake.fragments.begin(); it != snake.fragments.end(); ++it) {
-    //(*this)(it->x, it->y) = 1;
     grid(it->x, it->y) = (Graphics::Pixel*)a;
   }
 }
 
-void Game::display() { grid.display(); }
+void Game::display() { grid.displayDiff(); }
 void Game::serve() {  // must be called after put
   if (!hasfood) {
     int free_cells = 0;
