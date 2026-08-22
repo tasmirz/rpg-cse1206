@@ -85,6 +85,8 @@ build: $(executable)
 release: $(executable)
 launch: build
 	@ $(executable)
+run: build
+	@ $(executable)
 debug: build
 	gdb $(executable) --tui
 prepare:

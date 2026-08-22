@@ -1,0 +1,29 @@
+# Standalone test harness for the Database. Builds a binary that
+# exercises save/load/reload semantics outside the RPG main loop.
+
+CXX      = g++
+STD      = -std=gnu++2b
+CXXFLAGS = -Wall -Wextra -Wno-long-long -g3 -I..
+
+SRCS = $(wildcard ../*.cxx) dbtest.cxx
+OBJS = $(patsubst %.cxx,build/%.o,$(notdir $(SRCS)))
+BIN  = build/dbtest
+
+all: $(BIN)
+
+$(BIN): $(OBJS)
+	$(CXX) $(STD) -o $@ $(OBJS)
+
+build/%.o: ../%.cxx | build
+	$(CXX) $(STD) $(CXXFLAGS) -c -o $@ $<
+
+build/dbtest.o: dbtest.cxx | build
+	$(CXX) $(STD) $(CXXFLAGS) -c -o $@ $<
+
+build:
+	mkdir -p build
+
+clean:
+	rm -rf build
+
+.PHONY: all clean

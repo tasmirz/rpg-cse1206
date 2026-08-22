@@ -60,11 +60,13 @@ class Schema : public ArraySchema {
 
 class Cell {
   int size;
+  bool owns;  // true if Row destructor should free `data` (heap-allocated)
   friend class Row;
 
  public:
   void* data;
   bool set(int size, void* data);
+  bool setOwned(int size, void* data);  // marks the cell as heap-owned
   void* get();
   Cell();
   ~Cell();
