@@ -8,7 +8,7 @@
 
 #include "../header.hxx"
 
-static void dump(const std::string& tag) {
+[[maybe_unused]] static void dump(const std::string& tag) {
   std::cout << "=== " << tag << " ===\n";
 }
 
@@ -69,8 +69,8 @@ int main(int argc, char** argv) {
     DB::Row& r = db["scorecard"].row("playerA");
     int score = 7;
     r["score"].set(DB::Schema::integer, &score);
-    char* name = (char*)"Alice";
-    r["name"].set(DB::Schema::text, name);
+    const char* name = "Alice";
+    r["name"].set(DB::Schema::text, const_cast<char*>(name));
     r.save();
     std::cout << "Wrote playerA score=7 name=Alice\n";
 
@@ -83,8 +83,8 @@ int main(int argc, char** argv) {
     DB::Row& r2 = db["scorecard"].row("playerB");
     int s2 = 3;
     r2["score"].set(DB::Schema::integer, &s2);
-    char* n2 = (char*)"Bob";
-    r2["name"].set(DB::Schema::text, n2);
+    const char* n2 = "Bob";
+    r2["name"].set(DB::Schema::text, const_cast<char*>(n2));
     r2.save();
     std::cout << "Wrote playerB score=3 name=Bob\n";
   } else if (op == "reloadmultifield") {

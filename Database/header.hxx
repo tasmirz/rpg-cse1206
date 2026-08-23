@@ -27,6 +27,7 @@ class ArraySchema {
   friend class Schema;
   ArraySchema& addField(std::string fieldname, int type);
   virtual int getTotalFields();
+  virtual ~ArraySchema() = default;
 };
 
 class Schema : public ArraySchema {

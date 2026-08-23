@@ -2,7 +2,7 @@
 #include <iostream>
 #include <thread>
 
-#include "./Database/header.hxx";
+#include "./Database/header.hxx"
 #include "./Engine/header.hxx"
 #include "header.hxx"
 
@@ -12,7 +12,7 @@ bool death = false;
 DB::Database db("Snake");
 DB::Schema scorecard;
 DB::Schema state;
-char* f = "score";
+const char* f = "score";
 Engine::Game game(20, 20, 1);
 void setup() { death = false; }
 void gameLoop() {
@@ -129,7 +129,7 @@ int main() {
   // std::ios_base::sync_with_stdio(false);
   // std::cin.tie(NULL);
 
-  /* Graphics::Grid g(13, 11);
+  // Graphics::Grid g(13, 11);
 
   Graphics::Color *c = new Graphics::Color(
       Graphics::rgb(255, 255, 0, 1), Graphics::rgb(100, 0, 100, 1),

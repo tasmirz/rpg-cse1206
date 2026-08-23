@@ -1,6 +1,5 @@
 #include <cstdlib>
 #include <iostream>
-#include <random>
 
 #include "header.hxx"
 using namespace Engine;
@@ -15,8 +14,10 @@ Game::Game(int columns, int rows, int level)
     mp[i] = 0;
   }
   snake.fragments.push_back({columns / 2, rows / 2});
-  // std::cout << snake.fragments.front().x << std::endl;
-  //   snake.fragments.push_back({5, 6});
+}
+Game::~Game() {
+  delete[] mp;
+  delete current_food;
 }
 int& Game::operator()(int i, int j) { return *(mp + j * columns + i); }
 bool Game::move(DIRECTIONS direction, bool ate) {

@@ -39,13 +39,13 @@ class Color {
 static const Color default_color({0, 0, 0, 1}, {200, 200, 200, 1});
 class Pixel {
   const Color* color;
-  char cell[4] = " ";
+  char cell[8] = " ";
   Pixel& setColor(Color* color);
-  Pixel& setCell(char c[4]);
+  Pixel& setCell(const char c[8]);
 
  public:
   Pixel();
-  Pixel(char cell[4], Color* color);
+  Pixel(const char cell[8], Color* color);
   friend std::ostream& ::operator<<(std::ostream& out, Pixel pixel);
 };
 
@@ -58,10 +58,10 @@ class Grid {
   unsigned rows, columns;
 
  public:
-  Pixel*& operator()(unsigned row, unsigned col);
+  Pixel*& operator()(int col, int row);
   Grid(int col, int row);
   Grid();
-  void set(int rows, int columns);
+  void set(int cols, int rows);
   void display();
   void displayDiff();   // only redraw cells that changed since last frame
   void clean();
@@ -86,7 +86,7 @@ class Gylph {
  public:
   Gylph(std::vector<char[4]> ascii, std::vector<Color> color,
         Boundary boundary);
-  void plot(Grid& grid) {}
+  void plot([[maybe_unused]] Grid& grid) {}
 };
 };  // namespace Graphics
 #endif

@@ -13,7 +13,7 @@ Gylph::Gylph(std::vector<char[4]> ascii, std::vector<Color> color,
     std::cerr << err;
     exit(-1);
   }
-  for (int i = 0; i < ascii.size(); i++) {
+  for (size_t i = 0; i < ascii.size(); i++) {
     pixels.push_back(Pixel(ascii[i], &color[i]));
   }
 }

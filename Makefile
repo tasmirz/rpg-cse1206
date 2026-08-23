@@ -26,7 +26,7 @@ libraries	= ncurses
 
 #### Functions
 setvar	   = $(foreach A,$2,$(eval $1: $A))
-addprefix  = $(foreach i,$2,$1$2) #removed echo
+addprefix  = $(foreach i,$2,$1$i)
 
 
 
@@ -64,7 +64,7 @@ endif
 ####
 
 
-.PUNY:debug build release launch clean prepare clean_raw
+.PHONY: debug build release launch clean prepare clean_raw rpg dbtest
 
 
 
@@ -100,17 +100,17 @@ dbtest:
 	$(MAKE) -C Database/test -f Makefile-test
 	./Database/test/build/dbtest
 prepare:
-	mkdir $(build_dir)
-	mkdir $(bin_dir)
-	mkdir $(bin_dir)/release
-	mkdir $(bin_dir)/debug
-	mkdir $(obj_dir)
-	mkdir $(obj_dir)/release
-	mkdir $(obj_dir)/debug
-	mkdir $(foreach dir,$(src_dirs),$(obj_dir)/release/$(dir))
-	mkdir $(foreach dir,$(src_dirs),$(obj_dir)/debug/$(dir))
+	mkdir -p $(build_dir)
+	mkdir -p $(bin_dir)
+	mkdir -p $(bin_dir)/release
+	mkdir -p $(bin_dir)/debug
+	mkdir -p $(obj_dir)
+	mkdir -p $(obj_dir)/release
+	mkdir -p $(obj_dir)/debug
+	mkdir -p $(foreach dir,$(src_dirs),$(obj_dir)/release/$(dir))
+	mkdir -p $(foreach dir,$(src_dirs),$(obj_dir)/debug/$(dir))
 
 clean_raw:
-	@ rm -r build
+	@ rm -rf build
 
 clean: clean_raw prepare

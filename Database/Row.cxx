@@ -18,6 +18,7 @@ Row::~Row() {
         case Schema::integer: delete static_cast<int*>(c.data); break;
         case Schema::floating: delete static_cast<double*>(c.data); break;
         case Schema::text: delete[] static_cast<char*>(c.data); break;
+        case Schema::boolean: delete static_cast<bool*>(c.data); break;
         default: break;
       }
       c.data = nullptr;
@@ -33,6 +34,7 @@ Row::~Row() {
             case Schema::integer: delete static_cast<int*>(c.data); break;
             case Schema::floating: delete static_cast<double*>(c.data); break;
             case Schema::text: delete[] static_cast<char*>(c.data); break;
+            case Schema::boolean: delete static_cast<bool*>(c.data); break;
             default: break;
           }
           c.data = nullptr;
@@ -115,8 +117,9 @@ bool Row::load() {
       std::memcpy(buf, s.c_str(), s.size() + 1);
       cells[name].setOwned(Schema::text, buf);
     } else if (type == Schema::boolean) {
-      bool* v = new bool(false);
-      file.read(reinterpret_cast<char*>(v), sizeof(bool));
+      char tmp = 0;
+      file.read(&tmp, sizeof(char));
+      bool* v = new bool(tmp != 0);
       cells[name].setOwned(Schema::boolean, v);
     }
   }
@@ -148,6 +151,13 @@ bool Row::load() {
           file.read(reinterpret_cast<char*>(v), sizeof(double));
           Cell cc;
           cc.setOwned(Schema::floating, v);
+          qq[j.first] = cc;
+        } else if (j.second == Schema::boolean) {
+          char tmp = 0;
+          file.read(&tmp, sizeof(char));
+          bool* v = new bool(tmp != 0);
+          Cell cc;
+          cc.setOwned(Schema::boolean, v);
           qq[j.first] = cc;
         }
       }
@@ -257,6 +267,9 @@ bool Row::save() {
         } else if (j.second == Schema::floating) {
           double v = c.data ? *static_cast<double*>(c.data) : 0.0;
           buf.write(reinterpret_cast<char*>(&v), sizeof(double));
+        } else if (j.second == Schema::boolean) {
+          char v = c.data ? (*static_cast<bool*>(c.data) ? 1 : 0) : 0;
+          buf.write(&v, sizeof(char));
         }
       }
     }

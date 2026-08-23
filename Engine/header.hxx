@@ -27,9 +27,9 @@ static const Graphics::Color *c2 = new Graphics::Color(
     Graphics::rgb(255, 255, 0, 1), Graphics::rgb(100, 0, 0, 1),
     Graphics::Color::ITALIC | Graphics::Color::BLINK);
 static const Graphics::Pixel *a =
-    new Graphics::Pixel("█", (Graphics::Color *)c);
+    new Graphics::Pixel("█", const_cast<Graphics::Color *>(c));
 static const Graphics::Pixel *B =
-    new Graphics::Pixel("█", (Graphics::Color *)c2);
+    new Graphics::Pixel("█", const_cast<Graphics::Color *>(c2));
 class Game;
 class Food {
  protected:
@@ -37,6 +37,7 @@ class Food {
 
  public:
   virtual int give_points() = 0;
+  virtual ~Food() = default;
 };
 class RegularFood : public Food {
  public:
@@ -57,8 +58,8 @@ class Game {
   Point foodLocation;
   Food *current_food;
   Graphics::Grid grid;
-  int *mp;
-  int level, rows, columns;
+  int *mp = nullptr;
+  int rows, columns, level;
   DIRECTIONS curr = right;
   Snake snake;
   RegularFood rf;
@@ -67,6 +68,7 @@ class Game {
  public:
   int score = 0;
   Game(int columns, int rows, int level);
+  ~Game();
   bool move(DIRECTIONS direction = prev, bool ate = false);
   int &operator()(int i, int j);
   void plot();

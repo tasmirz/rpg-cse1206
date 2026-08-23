@@ -5,16 +5,17 @@
 using namespace Graphics;
 
 Pixel::Pixel() { color = &Graphics::default_color; }
-Pixel::Pixel(char cell[4], Color* color) : color(color) {
-  strcpy(this->cell, cell);
+Pixel::Pixel(const char cell[8], Color* color) : color(color) {
+  std::strncpy(this->cell, cell, sizeof(this->cell) - 1);
+  this->cell[sizeof(this->cell) - 1] = '\0';
 }
 std::ostream& operator<<(std::ostream& out, Pixel pixel) {
   out << pixel.color->put() << pixel.cell << Color::reset();
   return out;
 }
-Pixel& Pixel::setCell(char c[4]) {
-  // cell = c;
-  strcpy(cell, c);
+Pixel& Pixel::setCell(const char c[8]) {
+  std::strncpy(cell, c, sizeof(cell) - 1);
+  cell[sizeof(cell) - 1] = '\0';
   return *this;
 }
 Pixel& Pixel::setColor(Color* color) {

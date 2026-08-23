@@ -3,19 +3,25 @@
 #include "header.hxx"
 using namespace Graphics;
 
-Pixel*& Grid::operator()(unsigned col, unsigned row) {
-  if (row < rows && col < columns)
-    return graph[row * columns + col];
-  else
-    return graph[0];
-  // std::cout << " \nr" << col << " " << row << std::endl;
-  // std::cout << " \nR " << columns << " " << rows << std::endl;
+Pixel*& Grid::operator()(int col, int row) {
+  if (col >= 0 && row >= 0 && static_cast<unsigned>(row) < rows &&
+      static_cast<unsigned>(col) < columns)
+    return graph[static_cast<unsigned>(row) * columns +
+                 static_cast<unsigned>(col)];
+  else {
+    static Pixel* dummy = nullptr;
+    // Out-of-bounds access: return dummy reference to avoid corrupting graph[0]
+    // Caller should ensure coordinates are in-bounds; we avoid UB.
+    if (dummy == nullptr) dummy = (Pixel*)blank_pixel;
+    return dummy;
+  }
 }
 
 Grid::Grid(int columns, int rows) : rows(rows), columns(columns) {
-  graph = new Pixel*[rows * columns + 1111];
-  prev = new Pixel*[rows * columns + 1111];
-  for (int i = 0; i < rows * columns + 1110; i++) {
+  size_t n = static_cast<size_t>(rows) * static_cast<size_t>(columns);
+  graph = new Pixel*[n];
+  prev = new Pixel*[n];
+  for (size_t i = 0; i < n; i++) {
     graph[i] = (Pixel*)blank_pixel;
     prev[i] = nullptr;
   }
@@ -23,13 +29,14 @@ Grid::Grid(int columns, int rows) : rows(rows), columns(columns) {
 }
 Grid::Grid() {}
 void Grid::set(int c, int r) {
-  rows = r;
-  columns = c;
+  rows = static_cast<unsigned>(r);
+  columns = static_cast<unsigned>(c);
   try {
     if (_set) throw "[Grid] second time init\n";
-    graph = new Pixel*[rows * columns + 10];
-    prev = new Pixel*[rows * columns + 10];
-    for (int i = 0; i < rows * columns; i++) {
+    size_t n = static_cast<size_t>(rows) * static_cast<size_t>(columns);
+    graph = new Pixel*[n];
+    prev = new Pixel*[n];
+    for (size_t i = 0; i < n; i++) {
       graph[i] = (Pixel*)blank_pixel;
       prev[i] = nullptr;
     }
@@ -76,6 +83,6 @@ void Grid::displayDiff() {
 }
 
 void Grid::clean() {
-  for (unsigned i = 0; i < rows * columns; i++) graph[i] = 0;
-  // std::cout << rows << " " << columns;
+  size_t n = static_cast<size_t>(rows) * static_cast<size_t>(columns);
+  for (size_t i = 0; i < n; i++) graph[i] = nullptr;
 }
